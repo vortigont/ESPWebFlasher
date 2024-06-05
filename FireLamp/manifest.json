@@ -1,0 +1,15 @@
+{
+    "name": "FireLamp EmbUI",
+    "builds": [
+        {
+            "chipFamily": "ESP32",
+            "improv": false,
+            "parts": [
+                {
+                    "path": "bin/factory.esp32_4M.bin",
+                    "offset": 0
+                }
+            ]
+        }
+    ]
+}

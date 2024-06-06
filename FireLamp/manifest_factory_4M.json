@@ -1,120 +1,21 @@
 {
   "name": "FireLamp EmbUI",
   "version":"3.6.1",
-  "source_url": "https://github.com/vortigont/FireLamp_JeeUI/tree/v3.6.1",
-  "release_url": "https://github.com/vortigont/FireLamp_JeeUI/releases/tag/v3.6.1",
-  "images": {
-    "esp32-factory-4M": {
-      "size": 4194304,
-      "offset": "0x0",
-      "path": "factory.esp32_4M.bin"
+  "new_install_prompt_erase": false,
+  "builds": [
+    {
+      "chipFamily": "ESP32",
+      "improv": false,
+      "parts": [
+        { "path": "bin/factory.esp32_4M.bin", "offset": 0 }
+      ]
     },
-    "esp32-factory-16M": {
-      "size": 16777216,
-      "offset": "0x0",
-      "path": "factory.esp32_16M.bin"
-    },
-    "esp32-S3-factory-4M": {
-      "size": 4194304,
-      "offset": "0x0",
-      "path": "factory.esp32S3_4M.bin"
-    },
-    "esp32-S3-factory-16M": {
-      "size": 16777216,
-      "offset": "0x0",
-      "path": "factory.esp32S3_16M.bin"
-    },
-    "esp32-firmware": {
-      "size": 1474608,
-      "offset": "0x10000",
-      "path": "firmware.esp32_4M.bin"
-    },
-    "esp32-S3-firmware": {
-      "size": 1429328,
-      "offset": "0x10000",
-      "path": "firmware.esp32S3_4M.bin"
+    {
+      "chipFamily": "ESP32-S3",
+      "improv": false,
+      "parts": [
+        { "path": "bin/factory.esp32S3_4M.bin", "offset": 0 }
+      ]
     }
-  },
-  "installable": {
-    "name": "installable",
-    "description": "Варианты прошивок для установки",
-    "choice-name": "Processor type",
-    "choices": [
-      {
-        "name": "esp32",
-        "description": "ESP32-WROOM 4MiB Flash",
-        "choice-name": "Firmware variant",
-        "choices": [
-          {
-            "name": "wifi",
-            "description": "Supports WiFI and WebUI",
-            "choice-name": "Installation type",
-            "choices": [
-              {
-                "name": "fresh-install",
-                "description": "Complete FluidNC installation, erasing all previous data.",
-                "erase": true,
-                "images": [
-                  "esp32-4m-partitions",
-                  "esp32-bootloader",
-                  "esp32-bootapp",
-                  "esp32-wifi-firmware",
-                  "esp32-wifi-4m-filesystem"
-                ]
-              },
-              {
-                "name": "firmware-update",
-                "description": "Update FluidNC to latest firmware version, preserving previous filesystem data.",
-                "erase": false,
-                "images": [
-                  "esp32-wifi-firmware"
-                ]
-              },
-              {
-                "name": "filesystem-update",
-                "description": "Update FluidNC filesystem only, erasing previous filesystem contents.",
-                "erase": false,
-                "images": [
-                  "esp32-wifi-4m-filesystem"
-                ]
-              }
-            ]
-          },
-          {
-            "name": "bluetooth",
-            "description": "Supports connecting via Bluetooth serial protocol",
-            "choice-name": "Installation type",
-            "choices": [
-              {
-                "name": "fresh-install",
-                "description": "Complete FluidNC installation, erasing all previous data.",
-                "erase": true,
-                "images": [
-                  "esp32-4m-partitions",
-                  "esp32-bootloader",
-                  "esp32-bootapp",
-                  "esp32-bt-firmware"
-                ]
-              },
-              {
-                "name": "firmware-update",
-                "description": "Update FluidNC to latest firmware version, preserving previous filesystem data.",
-                "erase": false,
-                "images": [
-                  "esp32-bt-firmware"
-                ]
-              }
-            ]
-          }
-        ]
-      },
-      {
-        "name": "esp32-s3",
-        "description": "For ESP32-S3",
-        "choice-name": "Firmware variant",
-        "choices": [
-        ]
-      }
-    ]
-  }
+  ]
 }

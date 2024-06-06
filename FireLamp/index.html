@@ -18,55 +18,78 @@
         <ol>
             <li>Выберите версию прощивки;</li>
             <li>Подключите плату ESP к USB-порту;</li>
-            <li>Нажмите кнопку «Установить»;</li>
-            <li id="coms">В появившемся окне выберите COM-порт подключенной платы;<a class="comsHelp" data-tooltip="Не отображается нужный COM порт?">&#xe800;</a>
-                <div class="coms hide">
-                    <p>Возможно, вам не хватает драйверов для вашей платы.</p>
-                    <p>Драйверы для чипов, обычно используемых в платах ESP:</p>
-                    <div class="drv">
-                        <a href="./drivers/CH340G.rar" target="_blank">CH340G</a> |
-                        <a href="./drivers/CH9102x.rar" target="_blank">CH9102x</a> |
-                        <a href="./drivers/CP210x.rar" target="_blank">CP210x</a> |
-                        <a href="./drivers/PL2303.rar" target="_blank">PL2303</a>
-                    </div>
-                    <p>Так же убедитесь, что используемый USB-кабель исправен.</p>
-                </div>
-            </li>
-            <li>Нажмите кноку «Подключиться»</li>
-            <li>Затем в «Панели управления» 2 раза нажмите «Установить WiFi-CLOCK x»</li>
+            <li>Нажмите кноку «Connect»</li>
+            <li>В появившемся окне выберите порт подключения к плате и нажмите кноку «Connect»</li>
+            <li>Нажмите кнопку «Install FireLamp EmbUI»</li>
+            <li>Дождитесь загрузки кода и подключитесь к плате по WiFi</li>
         </ol>
-        
+
+        <br>
+        <br>
+        <div class="radios">
+            <li><label><input type="radio" name="type" value="factory_4M" /> FireLamp EmbUI - Factory image (4MiB)<span id="factory_4M_img"></span></label></li>
+            <li><label><input type="radio" name="type" value="factory_16M" /> FireLamp EmbUI - Factory image (16MiB)<span id="factory_16M_img"></span></label></li>
+            <li><label><input type="radio" name="type" value="firmware" /> FireLamp EmbUI - Update image<span id="firmware_img"></span></label></li>
+            <p class="button-row" align="center">
+                <esp-web-install-button class="invisible" id="installButton">
+                    <button slot="activate">Запустить установщик</button>
+                    <span slot="unsupported">Ваш браузер не поддерживается, попробуйте настольную версию Google Chrome, Opera, MS Edge</span>
+                    <span slot="not-allowed">Ah snap, you are not allowed to use this on HTTP!</span>
+                </esp-web-install-button>
+            </p>
+        </div>
+
+        <br>
+        <br>
+        <br>            
     </div>
 
-    <div id="main" style="display: none;">
-        <br>
-        <esp-web-install-button id="installButton" manifest="manifest.json"></esp-web-install-button>
-        <br>
-        <span>NOTE: Make sure to close anything using your devices com port (e.g. Serial monitor)</span>
-    </div>
-    <div id="notSupported" style="display: none;">
-        Your browser does not support the Web Serial API.
-    </div>
 
     
     <div class="footer">
         <div>
-            Telegram: <a href="https://t.me/s/CRMdevelop" target="_blank">CRMdevelop</a> |
-            Тема: <a href="https://github.com/WonderCRM/wondercrm.github.io" target="_blank">WonderCRM</a>
+            Telegram: <a href="https://t.me/s/LampDevs" target="_blank">LampDevs</a> |
+            Репозиторий: <a href="https://github.com/vortigont/FireLamp_JeeUI" target="_blank">FireLamp_JeeUI</a>
+        </div>
+        <div>
+            Дизайн: <a href="https://github.com/WonderCRM/wondercrm.github.io" target="_blank">WonderCRM</a> |
+            Telegram: <a href="https://t.me/s/CRMdevelop" target="_blank">CRMdevelop</a>            
         </div>
     </div>
 
 
-    <script type="module" src="https://unpkg.com/esp-web-tools@10.0.1/dist/web/install-button.js"></script>
+
+
     <script>
-        if(navigator.serial){
-            document.getElementById("notSupported").style.display = 'none';
-            document.getElementById("main").style.display = 'block';
-        } else {
-            document.getElementById("notSupported").style.display = 'block';
-            document.getElementById("main").style.display = 'none';
+        document.querySelectorAll('input[name="type"]').forEach(radio =>
+            radio.addEventListener("change", () => {
+            const button = document.querySelector('esp-web-install-button');
+            button.manifest = `./manifest_${radio.value}.json`;
+            button.classList.remove('invisible');
+            }
+        ));
+
+        function getVer(board) {
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', `./manifest_${board}.json`, true);
+            xhr.onload = function() {
+                try {
+                    var obj = JSON.parse(xhr.responseText);
+                    document.getElementById(`${board}_img`).innerHTML = obj.version;
+                } catch (e) {
+                    console.log(`GET request error for ESP${board} board software version`);
+                }
+            }
+            xhr.send(null);
         }
+			
+        getVer("factory_4M");
+        getVer("factory_16M");
+        getVer("firmware");
     </script>
+
+    <!--    https://esphome.github.io/esp-web-tools/    -->
+    <script type="module" src="https://unpkg.com/esp-web-tools@10/dist/web/install-button.js?module"></script>
 
 </body>
 </html>

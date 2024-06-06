@@ -16,23 +16,23 @@
             <h3>ВЕБ УСТАНОВЩИК</h3>
         </div>
         <ol>
-            <li>Выберите версию прощивки;</li>
+            <li>Выберите версию прошивки;</li>
             <li>Подключите плату ESP к USB-порту;</li>
             <li>Нажмите кноку «Connect»</li>
             <li>В появившемся окне выберите порт подключения к плате и нажмите кноку «Connect»</li>
             <li>Нажмите кнопку «Install FireLamp EmbUI»</li>
             <li>Дождитесь загрузки кода и подключитесь к плате по WiFi</li>
+            <li>Внимание! При прошивке обновления НЕ устанавливайте флажёк "Erase device"</li>
         </ol>
 
         <br>
         <br>
         <div class="radios">
-            <li><label><input type="radio" name="type" value="factory_4M" /> FireLamp EmbUI - Factory image (4MiB)<span id="factory_4M_img"></span></label></li>
-            <li><label><input type="radio" name="type" value="factory_16M" /> FireLamp EmbUI - Factory image (16MiB)<span id="factory_16M_img"></span></label></li>
-            <li><label><input type="radio" name="type" value="firmware" /> FireLamp EmbUI - Update image<span id="firmware_img"></span></label></li>
+            <li><label><input type="radio" name="type" value="factory_4M" /> FireLamp EmbUI - Factory image (4MiB) v.<span id="factory_4M_img"></span></label></li>
+            <li><label><input type="radio" name="type" value="factory_16M" /> FireLamp EmbUI - Factory image (16MiB) v.<span id="factory_16M_img"></span></label></li>
+            <li><label><input type="radio" name="type" value="firmware" /> FireLamp EmbUI - Update image v.<span id="firmware_img"></span></label></li>
             <p class="button-row" align="center">
                 <esp-web-install-button class="invisible" id="installButton">
-                    <button slot="activate">Запустить установщик</button>
                     <span slot="unsupported">Ваш браузер не поддерживается, попробуйте настольную версию Google Chrome, Opera, MS Edge</span>
                     <span slot="not-allowed">Ah snap, you are not allowed to use this on HTTP!</span>
                 </esp-web-install-button>

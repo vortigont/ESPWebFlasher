@@ -66,15 +66,15 @@ h1, h3 {
 	position: relative;
 	left: 0;
 	right: 0;
-	top: 160px;
+	top: 100px;
 	margin-inline: auto;
 	animation: fi 1.5s .7s both;
 	text-align: left;
 }
 .radios {
-	max-width: 360px;
+	max-width: 500px;
 	margin: 20px auto 40px;
-	text-align: center;
+	text-align: left;
 }
 
 z {

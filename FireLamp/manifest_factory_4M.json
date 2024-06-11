@@ -1,6 +1,6 @@
 {
   "name": "FireLamp EmbUI",
-  "version":"3.6.1",
+  "version":"3.6.2",
   "new_install_prompt_erase": false,
   "builds": [
     {

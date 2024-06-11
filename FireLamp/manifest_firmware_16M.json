@@ -7,14 +7,14 @@
       "chipFamily": "ESP32",
       "improv": false,
       "parts": [
-        { "path": "bin/factory.esp32_16M_v3.6.2.bin", "offset": 0 }
+        { "path": "bin/firmware.esp32_16M_v3.6.2.bin", "offset": 65536 }
       ]
     },
     {
       "chipFamily": "ESP32-S3",
       "improv": false,
       "parts": [
-        { "path": "bin/factory.esp32S3_16M_v3.6.2.bin", "offset": 0 }
+        { "path": "bin/firmware.esp32S3_16M_v3.6.2.bin", "offset": 65536 }
       ]
     }
   ]

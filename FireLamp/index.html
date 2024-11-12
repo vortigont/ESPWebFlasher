@@ -28,15 +28,12 @@
         <br>
         <br>
         <div class="radios">
-            <li><label><input type="radio" name="type" value="factory_4M" />   FireLamp EmbUI - Factory image (4MiB) v.<span id="factory_4M_img"></span></label></li>
-            <li><label><input type="radio" name="type" value="factory_16M" />  FireLamp EmbUI - Factory image (16MiB) v.<span id="factory_16M_img"></span></label></li>
-            <li><label><input type="radio" name="type" value="factory_HDWF2" />FireLamp EmbUI - Factory image (HD-WF2) v.<span id="factory_HDWF2_img"></span></label></li>
-            <li><label><input type="radio" name="type" value="firmware_4M" />  FireLamp EmbUI - Update image (4MiB) v.<span id="firmware_4M_img"></span></label></li>
-            <li><label><input type="radio" name="type" value="firmware_16M" /> FireLamp EmbUI - Update image (16MiB) v.<span id="firmware_16M_img"></span></label></li>
-            <li><label><input type="radio" name="type" value="firmware_HDWF2"/>FireLamp EmbUI - Update image (HD-WF2) v.<span id="firmware_HDWF2_img"></span></label></li>
             <li><label><input type="radio" name="type" value="factory_4M_v381" />   FireLamp EmbUI - Factory image (4MiB) v.<span id="factory_4M_v381_img"></span></label></li>
             <li><label><input type="radio" name="type" value="factory_16M_v381" />  FireLamp EmbUI - Factory image (16MiB) v.<span id="factory_16M_v381_img"></span></label></li>
             <li><label><input type="radio" name="type" value="factory_HDWF2_v381" />FireLamp EmbUI - Factory image (HD-WF2) v.<span id="factory_HDWF2_v381_img"></span></label></li>
+            <li><label><input type="radio" name="type" value="factory_4M_v400" />   FireLamp EmbUI - Factory image (4MiB) v.<span id="factory_4M_v400_img"></span></label></li>
+            <li><label><input type="radio" name="type" value="factory_16M_v400" />  FireLamp EmbUI - Factory image (16MiB) v.<span id="factory_16M_v400_img"></span></label></li>
+            <li><label><input type="radio" name="type" value="factory_HDWF2_v400" />FireLamp EmbUI - Factory image (HD-WF2) v.<span id="factory_HDWF2_v400_img"></span></label></li>
             <p class="button-row" align="center">
                 <esp-web-install-button class="invisible" id="installButton">
                     <span slot="unsupported">Ваш браузер не поддерживается, попробуйте настольную версию Google Chrome, Opera, MS Edge</span>
@@ -89,15 +86,12 @@
             xhr.send(null);
         }
 			
-        getVer("factory_4M");
-        getVer("factory_16M");
-        getVer("firmware_4M");
-        getVer("firmware_16M");
-        getVer("factory_HDWF2");
-        getVer("firmware_HDWF2");
         getVer("factory_4M_v381");
         getVer("factory_16M_v381");
         getVer("factory_HDWF2_v381");
+        getVer("factory_4M_v400");
+        getVer("factory_16M_v400");
+        getVer("factory_HDWF2_v400");
     </script>
 
     <!--    https://esphome.github.io/esp-web-tools/    -->

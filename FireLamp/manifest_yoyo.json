@@ -1,0 +1,14 @@
+{
+  "name": "yoyoRadio - factory",
+  "version":"0.1.1",
+  "new_install_prompt_erase": false,
+  "builds": [
+    {
+      "chipFamily": "ESP32-S3",
+      "improv": false,
+      "parts": [
+        { "path": "bin/factory.yoyoRadio_535_71e9ff1.bin", "offset": 0 }
+      ]
+    }
+  ]
+}

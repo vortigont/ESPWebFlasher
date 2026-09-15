@@ -1,13 +1,16 @@
 {
   "name": "FireLamp EmbUI",
-  "version":"3.7.2",
+  "version": "4.2.0",
   "new_install_prompt_erase": false,
   "builds": [
     {
       "chipFamily": "ESP32-S3",
       "improv": false,
       "parts": [
-        { "path": "bin/firmware.hdwf2_rel_v3.7.2.bin", "offset": 65536 }
+        {
+          "path": "bin/factory.esp32S3_HDWF2_v4.2.0.bin",
+          "offset": 0
+        }
       ]
     }
   ]

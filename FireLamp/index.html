@@ -27,27 +27,11 @@
 
         <br>
         <br>
+        <div id="fw_selector">
+            <form id="firelamp-form"></form>
+        <div>
+
         <div class="radios">
-            <li><label><input type="radio" name="type" value="factory_4M_v381" />   FireLamp EmbUI - Factory image (4MiB) v.<span id="factory_4M_v381_img"></span></label></li>
-            <li><label><input type="radio" name="type" value="factory_16M_v381" />  FireLamp EmbUI - Factory image (16MiB) v.<span id="factory_16M_v381_img"></span></label></li>
-            <li><label><input type="radio" name="type" value="factory_HDWF2_v381" />FireLamp EmbUI - Factory image (HD-WF2) v.<span id="factory_HDWF2_v381_img"></span></label></li>
-
-            <li><label><input type="radio" name="type" value="factory_4M_v413" />   FireLamp EmbUI - Factory image (4MiB) v.<span id="factory_4M_v413_img"></span></label></li>
-            <li><label><input type="radio" name="type" value="factory_16M_v413" />  FireLamp EmbUI - Factory image (16MiB) v.<span id="factory_16M_v413_img"></span></label></li>
-            <li><label><input type="radio" name="type" value="factory_HDWF2_v413" />FireLamp EmbUI - Factory image (HD-WF2) v.<span id="factory_HDWF2_v413_img"></span></label></li>
-            <li><label><input type="radio" name="type" value="firmware_4M_v413" />  FireLamp EmbUI - firmware image (4MiB) v.<span id="firmware_4M_v413_img"></span></label></li>
-            <li><label><input type="radio" name="type" value="firmware_16M_v413" /> FireLamp EmbUI - firmware image (16MiB) v.<span id="firmware_16M_v413_img"></span></label></li>
-            <li><label><input type="radio" name="type" value="firmware_HDWF2_v413"/>FireLamp EmbUI - firmware image (HD-WF2) v.<span id="firmware_HDWF2_v413_img"></span></label></li>
-
-            <li><label><input type="radio" name="type" value="factory_4M_v415" />   FireLamp EmbUI - Factory image (4MiB) v.<span id="factory_4M_v415_img"></span></label></li>
-            <li><label><input type="radio" name="type" value="factory_16M_v415" />  FireLamp EmbUI - Factory image (16MiB) v.<span id="factory_16M_v415_img"></span></label></li>
-            <li><label><input type="radio" name="type" value="factory_HDWF2_v415" />FireLamp EmbUI - Factory image (HD-WF2) v.<span id="factory_HDWF2_v415_img"></span></label></li>
-            <li><label><input type="radio" name="type" value="firmware_4M_v415" />  FireLamp EmbUI - firmware image (4MiB) v.<span id="firmware_4M_v415_img"></span></label></li>
-            <li><label><input type="radio" name="type" value="firmware_16M_v415" /> FireLamp EmbUI - firmware image (16MiB) v.<span id="firmware_16M_v415_img"></span></label></li>
-            <li><label><input type="radio" name="type" value="firmware_HDWF2_v415"/>FireLamp EmbUI - firmware image (HD-WF2) v.<span id="firmware_HDWF2_v415_img"></span></label></li>
-
-            <li><label><input type="radio" name="type" value="factory_yoyo" />  yoyoRadio Guiton JC3248W535<span id="factory_yoyo_img"></span></label></li>
-
             <p class="button-row" align="center">
                 <esp-web-install-button class="invisible" id="installButton">
                     <span slot="unsupported">Ваш браузер не поддерживается, попробуйте настольную версию Google Chrome, Opera, MS Edge</span>
@@ -77,54 +61,204 @@
 
 
 
-    <script>
-        document.querySelectorAll('input[name="type"]').forEach(radio =>
-            radio.addEventListener("change", () => {
-            const button = document.querySelector('esp-web-install-button');
-            button.manifest = `./manifest_${radio.value}.json`;
-            button.classList.remove('invisible');
-            }
-        ));
+<script>
+    document.querySelectorAll('input[name="type"]').forEach(radio =>
+        radio.addEventListener("change", () => {
+        const button = document.querySelector('esp-web-install-button');
+        button.manifest = `./manifest_${radio.value}.json`;
+        button.classList.remove('invisible');
+        }
+    ));
 
-        function getVer(board) {
-            var xhr = new XMLHttpRequest();
-            xhr.open('GET', `./manifest_${board}.json`, true);
-            xhr.onload = function() {
-                try {
-                    var obj = JSON.parse(xhr.responseText);
-                    document.getElementById(`${board}_img`).innerHTML = obj.version;
-                } catch (e) {
-                    console.log(`GET request error for ESP${board} board software version`);
-                }
-            }
-            xhr.send(null);
+    const form = document.querySelector("#firelamp-form");
+    const button = document.querySelector('esp-web-install-button');
+
+    // manifest object
+    const firelamp_images = {
+        "381": {
+            "factory":["4M", "16M", "HDFW2"]
+        },
+        "415":{
+            "factory":["4M", "16M", "HDFW2"],
+            "firmware":["4M", "16M", "HDFW2"]
+        },
+        "4.2.0":{
+            "factory":["4M", "16M", "HDFW2"],
+            "firmware":["4M", "16M", "HDFW2"]
+        }
+    }
+
+    const notes = {
+        "factory":"полная прошивка с переразметкой ФС",
+        "firmware":"только обоновление кода с сохранением настроек",
+        "4M":"ESP32/ESP32-S3 с 4 MiB флеш",
+        "16M":"ESP32/ESP32-S3 с 16 MiB флеш",
+        "HDFW2":"Huidu HDWF2/4 (ESP32-S3, 8 MiB)"
+    }
+
+
+    // Create version dropdown
+    const versionLabel = document.createElement("label");
+    versionLabel.textContent = "Firmware version: ";
+
+    const versionSelect = document.createElement("select");
+    versionSelect.id = "fw_version";
+    versionSelect.name = "fw_version";
+
+    for (const version of Object.keys(firelamp_images)) {
+        const option = document.createElement("option");
+        option.value = version;
+        option.textContent = version
+        versionSelect.appendChild(option);
+    }
+    versionSelect.selectedIndex = versionSelect.options.length - 1; // select later one by default
+    versionLabel.appendChild(versionSelect);
+    form.appendChild(versionLabel);
+
+    // Container for image types
+    const imageTypeContainer = document.createElement("div");
+    imageTypeContainer.id = "image-type-container";
+    form.appendChild(imageTypeContainer);
+
+    // Container for board types
+    const boardTypeContainer = document.createElement("div");
+    boardTypeContainer.id = "board-type-container";
+    form.appendChild(boardTypeContainer);
+
+
+    // Generate image type radio buttons
+    function generateImageTypes() {
+
+        imageTypeContainer.innerHTML = "";
+        boardTypeContainer.innerHTML = "";
+
+        const version = versionSelect.value;
+        const versionData = firelamp_images[version];
+
+        const label = document.createElement("p");
+        label.textContent = "Тип прошивки:";
+
+        imageTypeContainer.appendChild(label);
+
+        for (const imageType of Object.keys(versionData)) {
+            const wrapper = document.createElement("label");
+            const input = document.createElement("input");
+
+            input.type = "radio";
+            input.name = "img_type";
+            //input.id = "img_type_" + imageType;
+            input.value = imageType;
+
+            input.addEventListener("change", generateBoardTypes);
+
+            wrapper.appendChild(input);
+            wrapper.appendChild(
+                document.createTextNode(" " + imageType + " - " + notes[imageType] ?? '')
+            );
+
+            imageTypeContainer.appendChild(wrapper);
+            imageTypeContainer.appendChild(document.createElement("br"));
+        }
+    }
+
+
+    // Generate board type radio buttons
+    function generateBoardTypes() {
+        boardTypeContainer.innerHTML = "";
+        const version = versionSelect.value;
+        const imageType = document.querySelector(
+            'input[name="img_type"]:checked'
+        );
+
+        if (!imageType) {
+            return;
         }
 
+        const boardTypes = firelamp_images[version][imageType.value];
 
-        getVer("factory_4M_v381");
-        getVer("factory_16M_v381");
-        getVer("factory_HDWF2_v381");
+        const label = document.createElement("p");
+        label.textContent = "Тип платы (размер флеша):";
 
-        getVer("factory_4M_v415");
-        getVer("factory_16M_v415");
-        getVer("factory_HDWF2_v415");
-        getVer("firmware_4M_v415");
-        getVer("firmware_16M_v415");
-        getVer("firmware_HDWF2_v415");
+        boardTypeContainer.appendChild(label);
 
-        getVer("factory_4M_v413");
-        getVer("factory_16M_v413");
-        getVer("factory_HDWF2_v413");
-        getVer("firmware_4M_v413");
-        getVer("firmware_16M_v413");
-        getVer("firmware_HDWF2_v413");
+        for (const boardType of boardTypes) {
+            const wrapper = document.createElement("label");
+            const input = document.createElement("input");
 
-        getVer("firmware_yoyo");
-    </script>
+            input.type = "radio";
+            input.name = "board_type";
+            input.id = "board_type";
+            input.value = boardType;
 
-    <!--    https://esphome.github.io/esp-web-tools/    -->
-    <script type="module" src="https://unpkg.com/esp-web-tools@10/dist/web/install-button.js?module"></script>
-    <!-- http://wiki.fluidnc.com/en/WebInstaller -->
+            input.addEventListener("change", updateManifest);
+
+            wrapper.appendChild(input);
+            wrapper.appendChild(
+                document.createTextNode(" " + notes[boardType] ?? boardType)
+            );
+
+            boardTypeContainer.appendChild(wrapper);
+            boardTypeContainer.appendChild(document.createElement("br"));
+        }
+    }
+
+
+    // Update ESP Web Install button
+    function updateManifest() {
+
+        const fwVersion = document.querySelector(
+            'select#fw_version'
+        ).value;
+
+        const imgType = document.querySelector(
+            'input[name="img_type"]:checked'
+        );
+
+        const boardType = document.querySelector(
+            'input[name="board_type"]:checked'
+        );
+
+        if (!imgType || !boardType) {
+            return;
+        }
+
+        button.manifest = `./manifest_${imgType.value}_${boardType.value}_v${fwVersion}.json`;
+        button.classList.remove("invisible");
+        console.log("Manifest:", button.manifest);
+    }
+
+
+    // Version changed
+    versionSelect.addEventListener("change", () => {
+        // Hide install button until new selections are made
+        button.classList.add("invisible");
+        generateImageTypes();
+    });
+
+
+    // Initial generation
+    generateImageTypes();
+
+    function getVer(board) {
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', `./manifest_${board}.json`, true);
+        xhr.onload = function() {
+            try {
+                var obj = JSON.parse(xhr.responseText);
+                document.getElementById(`${board}_img`).innerHTML = obj.version;
+            } catch (e) {
+                console.log(`GET request error for ESP${board} board software version`);
+            }
+        }
+        xhr.send(null);
+    }
+
+    //getVer("firmware_yoyo");
+</script>
+
+<!--    https://esphome.github.io/esp-web-tools/    -->
+<script type="module" src="https://unpkg.com/esp-web-tools@10/dist/web/install-button.js?module"></script>
+<!-- http://wiki.fluidnc.com/en/WebInstaller -->
 
 </body>
 </html>

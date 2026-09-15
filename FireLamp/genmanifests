@@ -1,0 +1,89 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+# Version passed as argument
+if [[ $# -ne 1 ]]; then
+    echo "Usage: $0 <version>"
+    exit 1
+fi
+
+VER="$1"
+
+# Configuration
+FWTYPE="factory,firmware"
+FAMILY="ESP32,ESP32-S3"
+FSIZE="4M,16M"
+
+generate_manifest() {
+    local fwtype="$1"
+    local family="$2"       # as csv
+    local imgtype="$3"
+    local ver="$4"
+
+    local output="manifest_${fwtype}_${imgtype}_v${ver}.json"
+
+    jq -n \
+        --arg fwtype "$fwtype" \
+        --arg family "$family" \
+        --arg imgtype "$imgtype" \
+        --arg ver "$ver" \
+        '
+        {
+          name: "FireLamp EmbUI",
+          version: $ver,
+          new_install_prompt_erase: false,
+          builds: [
+            $family
+            | split(",")
+            | .[]
+            | {
+                chipFamily: .,
+                improv: false,
+                parts: [
+                  {
+                    path: (
+                      "bin/" + $fwtype + "."
+                      + (
+                          if . == "ESP32-S3" then "esp32S3"
+                          elif . == "HDWF2" then "hdwf2"
+                          else ascii_downcase
+                          end
+                        )
+                      + "_" + $imgtype + "_v" + $ver + ".bin"
+                    ),
+                    offset: (
+                      if $fwtype == "firmware" then
+                        65536
+                      else
+                        0
+                      end
+                    )
+                  }
+                ]
+              }
+          ]
+        }
+        ' > "$output"
+
+    echo "Generated: $output"
+}
+
+
+# Enumerate parameters outside the function
+IFS=',' read -ra FWTYPES <<< "$FWTYPE"
+IFS=',' read -ra FAMILIES <<< "$FAMILY"
+IFS=',' read -ra FSIZES <<< "$FSIZE"
+
+for fwtype in "${FWTYPES[@]}"; do
+    for fsize in "${FSIZES[@]}"; do
+
+        # IMGTYPE = FAMILY_item + FSIZE_item
+        imgtype="${fsize}"
+
+        generate_manifest "$fwtype" "$FAMILY" "$imgtype" "$VER"
+    done
+
+    # huidu board
+    generate_manifest "$fwtype" "ESP32-S3" "HDWF2" "$VER"
+done
